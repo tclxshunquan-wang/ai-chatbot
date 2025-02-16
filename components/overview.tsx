@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
-
 import { MessageIcon, VercelIcon } from './icons';
-import { deepseek } from '@ai-sdk/deepseek';
 
 export const Overview = () => {
   return (
@@ -20,7 +18,7 @@ export const Overview = () => {
           <MessageIcon size={32} />
         </p>
         <p>
-          Hello, I'm Deepseek, your personal assistant.
+          Hello, I&apos;m Deepseek, your personal assistant.
         </p>
       </div>
     </motion.div>
