@@ -1,9 +1,8 @@
 'use server';
 
 import { z } from 'zod';
-
 import { createUser, getUser } from '@/lib/db/queries';
-
+import { md5 } from 'js-md5';
 import { signIn } from './auth';
 
 const authFormSchema = z.object({
@@ -12,7 +11,7 @@ const authFormSchema = z.object({
 });
 
 export interface LoginActionState {
-  status: 'idle' | 'in_progress' | 'success' | 'failed' | 'invalid_data';
+  status: 'idle' | 'in_progress' | 'success' | 'failed' | 'invalid_data' | 'invalid_email';
 }
 
 export const login = async (
@@ -20,6 +19,12 @@ export const login = async (
   formData: FormData,
 ): Promise<LoginActionState> => {
   try {
+    const email = formData.get('email');
+
+    if(md5.hex(email as string) !== '265eb276afce0dcbae78958dde94af10'){
+      return { status: 'invalid_email' };
+    }
+
     const validatedData = authFormSchema.parse({
       email: formData.get('email'),
       password: formData.get('password'),
@@ -48,7 +53,8 @@ export interface RegisterActionState {
     | 'success'
     | 'failed'
     | 'user_exists'
-    | 'invalid_data';
+    | 'invalid_data'
+    | 'invalid_email';
 }
 
 export const register = async (
@@ -56,6 +62,11 @@ export const register = async (
   formData: FormData,
 ): Promise<RegisterActionState> => {
   try {
+
+    if(md5.hex(formData.get('email') as string) !== '265eb276afce0dcbae78958dde94af10'){
+      return { status: 'invalid_email' };
+    }
+
     const validatedData = authFormSchema.parse({
       email: formData.get('email'),
       password: formData.get('password'),

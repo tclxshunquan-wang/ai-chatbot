@@ -30,6 +30,8 @@ export default function Page() {
       toast.error('Failed to create account');
     } else if (state.status === 'invalid_data') {
       toast.error('Failed validating your submission!');
+    } else if (state.status === 'invalid_email') {
+      toast.error('Invalid email!');
     } else if (state.status === 'success') {
       toast.success('Account created successfully');
       setIsSuccessful(true);
